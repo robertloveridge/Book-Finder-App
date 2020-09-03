@@ -37,30 +37,30 @@
 
         <div class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-8">
-                <form class="card card-sm">
+                <div class="card card-sm">
                     <div class="card-body row no-gutters align-items-center">
                         <div class="col-auto">
                             <i class="fas fa-search h4 text-body"></i>
                         </div>
                         <!--end of col-->
                         <div class="col">
-                            <input class="form-control form-control-lg form-control-borderless" type="search"
+                            <input id="search-text" class="form-control form-control-lg form-control-borderless" type="search"
                                 placeholder="Search by Title, Author etc.">
                         </div>
                         <!--end of col-->
                         <div class="col-auto">
-                            <button class="btn btn-lg btn-success" type="submit">Search</button>
+                            <button class="btn btn-lg btn-success" id="search-btn">Search</button>
                         </div>
                         <!--end of col-->
                     </div>
-                </form>
+                </div>
             </div>
         <!--end of col-->
         </div>
 
         <hr>
 
-        <h1>Results</h1>
+        <h1 id="query"></h1>
 
         <table class="table" id="results">
             <thead class="thead-dark">
@@ -77,22 +77,47 @@
     </div>
 
     <script>
-        function runBookSearch(response) {
-            // loop all books in the response
-            for (var i = 0; i < response.items.length; i++) {
-                var item = response.items[i];
-                $('#results > tbody:last-child').append(`
-                <tr>
-                    <th scope="row">${item.volumeInfo.title}</th>
-                    <td>${item.volumeInfo.authors}</td>
-                </tr>
-                `);
-            }
+
+
+        $( "#search-btn" ).click(function() {
+
+            // before rendering new results, clear previous
+            clearResults();
+
+            //if no search term, we'll find something random for them
+            var randomSearches = ['harry potter', 'cooking chicken', 'astronomy'];
+            var randomItem = randomSearches[Math.floor(Math.random() * randomSearches.length)];
+
+            // search text from the user
+            var searchText = $('#search-text').val() ? $('#search-text').val() : randomItem;
+
+            $('#query').text(`You searched for "${searchText}"`);
+
+            var url = 'https://www.googleapis.com/books/v1/volumes?key=AIzaSyCIcYOXNWPLIUWGzserPVKEgoW2luCuX_U&q=' + searchText;
+
+            fetch(url)
+            .then((resp) => resp.json())
+            .then(function(data) {
+                let books = data.items;
+                return books.map(function(book) {
+                    $('#results > tbody:last-child').append(`
+                    <tr>
+                        <th scope="row">${book.volumeInfo.title}</th>
+                        <td>${book.volumeInfo.authors}</td>
+                    </tr>
+                    `);
+                })
+            })
+            .catch(function(error) {
+                console.log(error);
+            }); 
+
+        });
+
+        function clearResults(){
+            $('#results > tbody').empty();
         }
     </script>
-
-    <!-- Optional JavaScript -->
-    <script src="https://www.googleapis.com/books/v1/volumes?q=harry+potter&callback=runBookSearch&key=AIzaSyCIcYOXNWPLIUWGzserPVKEgoW2luCuX_U"></script>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
