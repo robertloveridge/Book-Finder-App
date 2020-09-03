@@ -67,10 +67,11 @@
               <tr>
                 <th scope="col">Title</th>
                 <th scope="col">Authors</th>
+                <th scope="col">Price</th>
               </tr>
             </thead>
             <tbody>
-                <tr></tr>
+                
             </tbody>
           </table>
 
@@ -100,12 +101,31 @@
             .then(function(data) {
                 let books = data.items;
                 return books.map(function(book) {
-                    $('#results > tbody:last-child').append(`
-                    <tr>
-                        <th scope="row">${book.volumeInfo.title}</th>
-                        <td>${book.volumeInfo.authors}</td>
-                    </tr>
-                    `);
+
+                    if (book.saleInfo.saleability == 'FOR_SALE'){
+                        $('#results > tbody:last-child').append(`
+                        <tr>
+                            <th scope="row"><a href="${book.volumeInfo.infoLink}" target="_blank">${book.volumeInfo.title}</a></th>
+                            <td>${book.volumeInfo.authors}</td>
+                            <td>
+                                <a href="${book.saleInfo.buyLink}" target="_blank">
+                                    <span class="badge badge-success">${book.saleInfo.retailPrice.currencyCode} ${book.saleInfo.retailPrice.amount}</span>
+                                </a>
+                            </td>
+                        </tr>
+                        `);
+                    }
+                    else {
+                        $('#results > tbody:last-child').append(`
+                        <tr>
+                            <th scope="row"><a href="${book.volumeInfo.infoLink}" target="_blank">${book.volumeInfo.title}</a></th>
+                            <td>${book.volumeInfo.authors}</td>
+                            <td>
+                                <span class="badge badge-secondary">Not For Sale</span>
+                            </td>
+                        </tr>
+                        `);
+                    }
                 })
             })
             .catch(function(error) {
