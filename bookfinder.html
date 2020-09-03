@@ -1,18 +1,101 @@
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <title>Books Finder</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    
+    <!-- jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <style>
+        .form-control-borderless {
+            border: none;
+        }
+
+        .form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
+            border: none;
+            outline: none;
+            box-shadow: none;
+        }
+    </style>
+
+    <title>Book-Finder-App</title>
   </head>
   <body>
-    <div id="content"></div>
+    
+    <div class="container p-3">
+
+      <img src="bookfinderapp-logo.png" style="width: 20%;">
+
+      <hr>
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8">
+                <form class="card card-sm">
+                    <div class="card-body row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-search h4 text-body"></i>
+                        </div>
+                        <!--end of col-->
+                        <div class="col">
+                            <input class="form-control form-control-lg form-control-borderless" type="search"
+                                placeholder="Search by Title, Author etc.">
+                        </div>
+                        <!--end of col-->
+                        <div class="col-auto">
+                            <button class="btn btn-lg btn-success" type="submit">Search</button>
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </form>
+            </div>
+        <!--end of col-->
+        </div>
+
+        <hr>
+
+        <h1>Results</h1>
+
+        <table class="table" id="results">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Authors</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr></tr>
+            </tbody>
+          </table>
+
+    </div>
+
     <script>
         function runBookSearch(response) {
             // loop all books in the response
             for (var i = 0; i < response.items.length; i++) {
                 var item = response.items[i];
-                document.getElementById("content").innerHTML += "<br>" + item.volumeInfo.title + "<br><img src='" + item.volumeInfo.imageLinks.smallThumbnail + "'>";
+                $('#results > tbody:last-child').append(`
+                <tr>
+                    <th scope="row">${item.volumeInfo.title}</th>
+                    <td>${item.volumeInfo.authors}</td>
+                </tr>
+                `);
             }
         }
     </script>
+
+    <!-- Optional JavaScript -->
     <script src="https://www.googleapis.com/books/v1/volumes?q=harry+potter&callback=runBookSearch&key=AIzaSyCIcYOXNWPLIUWGzserPVKEgoW2luCuX_U"></script>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
   </body>
 </html>
