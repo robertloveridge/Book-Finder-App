@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <title>Books Finder</title>
+  </head>
+  <body>
+    <div id="content"></div>
+    <script>
+        function runBookSearch(response) {
+            // loop all books in the response
+            for (var i = 0; i < response.items.length; i++) {
+                var item = response.items[i];
+                document.getElementById("content").innerHTML += "<br>" + item.volumeInfo.title + "<br><img src='" + item.volumeInfo.imageLinks.smallThumbnail + "'>";
+            }
+        }
+    </script>
+    <script src="https://www.googleapis.com/books/v1/volumes?q=harry+potter&callback=runBookSearch&key=AIzaSyCIcYOXNWPLIUWGzserPVKEgoW2luCuX_U"></script>
+  </body>
+</html>
