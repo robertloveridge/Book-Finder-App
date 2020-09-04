@@ -20,3 +20,10 @@ Useful links and resources
 --------------------------
 
 You can use the [Google Books API](https://developers.google.com/books/docs/overview)
+
+
+Screenshots
+-----------
+
+### Home screen with results
+![home](screenshots/home.png)
